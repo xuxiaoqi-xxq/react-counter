@@ -1,5 +1,17 @@
 import React from 'react'
+import { createStore } from 'redux'
 import Counter from '../Counter/index'
+
+
+function counter(state = 0, action) {
+    switch (action.type) {
+        case 'INCREASE': return ++state;
+        case 'DECREASE': return --state;
+        default: return state;
+    }
+}
+
+const store = createStore(counter);
 
 class CounterGroup extends React.Component {
 
@@ -11,15 +23,6 @@ class CounterGroup extends React.Component {
         };
     }
 
-    getInputNumber(inputCounterNumber) {
-        this.setState({ counterNumber: inputCounterNumber });
-    }
-
-    getCounterCount(total) {
-        let oldTotal = this.state.total;
-        this.setState({ total: oldTotal + total });
-    }
-
     updateInputNumber = (e) => {
         if (e.target.value === '') {
             this.setState({ counterNumber: 0 });
@@ -27,10 +30,15 @@ class CounterGroup extends React.Component {
             let num = parseInt(e.target.value);
             this.setState({ counterNumber: num });
         }
-        this.setState({total: 0});
+        this.setState({ total: 0 });
     }
 
     render() {
+        store.subscribe(() => {
+            this.setState({
+                total: store.getState()
+            })
+        });
         return (
             [
                 <div>
@@ -39,7 +47,9 @@ class CounterGroup extends React.Component {
                 </div>,
                 <div>total: {this.state.total}</div>,
                 <div>
-                    {new Array(parseInt(this.state.counterNumber)).fill(0).map((value, index) => <Counter key={index} total={this.state.total} getCount={this.getCounterCount.bind(this)} />)}
+                    {
+                        new Array(parseInt(this.state.counterNumber)).fill(0).map((value, index) => <Counter key={index} number={store.getState()} increase={() => store.dispatch({ type: 'INCREASE' })} decrease={() => store.dispatch({ type: 'DECREASE' })} />)
+                    }
                 </div>
             ]
         );

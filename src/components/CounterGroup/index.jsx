@@ -11,7 +11,7 @@ function counter(state = 0, action) {
     }
 }
 
-const store = createStore(counter);
+let store = createStore(counter);
 
 class CounterGroup extends React.Component {
 
@@ -30,7 +30,8 @@ class CounterGroup extends React.Component {
             let num = parseInt(e.target.value);
             this.setState({ counterNumber: num });
         }
-        this.setState({ total: 0 });
+        store = createStore(counter);
+        this.setState({total: 0});
     }
 
     render() {
@@ -48,7 +49,7 @@ class CounterGroup extends React.Component {
                 <div>total: {this.state.total}</div>,
                 <div>
                     {
-                        new Array(parseInt(this.state.counterNumber)).fill(0).map((value, index) => <Counter key={index} number={store.getState()} increase={() => store.dispatch({ type: 'INCREASE' })} decrease={() => store.dispatch({ type: 'DECREASE' })} />)
+                        new Array(parseInt(this.state.counterNumber)).fill(0).map((value, index) => <Counter key={index} store={store}/>)
                     }
                 </div>
             ]

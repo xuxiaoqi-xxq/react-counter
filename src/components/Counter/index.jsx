@@ -9,27 +9,33 @@ class Counter extends React.Component {
     }
 
     static getDerivedStateFromProps(nextProps, preProps) {
-        if (nextProps.total === 0) {
+        if (nextProps.store.getState() === 0) {
             return {number: 0};
         }
         return null;
     }
 
     increase = () => {
-        this.props.increase();
+        this.props.store.dispatch({type:'INCREASE'});
+        let num = this.state.number;
+        this.setState({
+            number: ++num
+        });
     }
 
     decrease = () => {
-        const ins = this.props.decrease;
-        ins();
-        console.log(this.props.number);
+        this.props.store.dispatch({type:'DECREASE'});
+        let num = this.state.number;
+        this.setState({
+            number: --num
+        });
     }
 
     render() {
         return (
             <div>
                 <button onClick={this.increase}>+</button>
-                <mark>{this.props.number}</mark>
+                <mark>{this.state.number}</mark>
                 <button onClick={this.decrease}>-</button>
             </div>
         );

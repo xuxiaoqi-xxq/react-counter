@@ -27,6 +27,7 @@ class CounterGroup extends React.Component {
             let num = parseInt(e.target.value);
             this.setState({ counterNumber: num });
         }
+        this.setState({total: 0});
     }
 
     render() {
@@ -37,7 +38,9 @@ class CounterGroup extends React.Component {
                     <input type="text" value={this.state.counterNumber} onChange={this.updateInputNumber}></input>
                 </div>,
                 <div>total: {this.state.total}</div>,
-                <div>{new Array(this.state.counterNumber).fill(parseInt(this.state.counterNumber)).map((value, index) => <Counter key={index} getCount={this.getCounterCount.bind(this)} />)}</div>
+                <div>
+                    {new Array(parseInt(this.state.counterNumber)).fill(0).map((value, index) => <Counter key={index} total={this.state.total} getCount={this.getCounterCount.bind(this)} />)}
+                </div>
             ]
         );
     }

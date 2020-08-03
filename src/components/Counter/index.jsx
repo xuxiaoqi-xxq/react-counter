@@ -8,6 +8,14 @@ class Counter extends React.Component {
         };
     }
 
+    static getDerivedStateFromProps(nextProps, preProps) {
+        if (nextProps.total === 0) {
+            return {number: 0};
+        }
+        return null;
+    }
+
+
     increase = () => {
         let num = this.state.number;
         this.setState({number: ++num});

@@ -4,19 +4,20 @@ class Counter extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            number: 0
+            number: 0,
+            counterCount:0
         };
     }
-
-    static getDerivedStateFromProps(nextProps, preProps) {
-        if (nextProps.store.getState() === 0) {
-            return {number: 0};
+// todo 用componentDidUpdate 为什么会出错
+    static getDerivedStateFromProps(nextProps, preState){
+        if(nextProps.counterCount !== preState.counterCount) {
+            return {number: 0, counterCount: nextProps.counterCount};
         }
         return null;
     }
 
     increase = () => {
-        this.props.store.dispatch({type:'INCREASE'});
+        this.props.updateTotal('INCREASE');
         let num = this.state.number;
         this.setState({
             number: ++num
@@ -24,7 +25,7 @@ class Counter extends React.Component {
     }
 
     decrease = () => {
-        this.props.store.dispatch({type:'DECREASE'});
+        this.props.updateTotal('DECREASE');
         let num = this.state.number;
         this.setState({
             number: --num
